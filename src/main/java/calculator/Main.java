@@ -59,6 +59,8 @@ public class Main extends javax.swing.JFrame {
     String action = "beginning";
     
     int constant = 0;
+    
+    boolean error = false;
 
     public Main() throws IOException {
 
@@ -361,23 +363,27 @@ public class Main extends javax.swing.JFrame {
     private void jButtonActionPerformed(java.awt.event.ActionEvent evt) {
         button_number = evt.getActionCommand();    
         System.out.println("first value of text: " + text.getText());
-        if (text.getText().equals("0")){
+        if (error){
+            text.setText(button_number);
+            constant = 0;
+            error = false;
+            action = "beginning";
+        } else if (text.getText().equals("0")){
             System.out.println("inside fisrt if, text is: " + text.getText());
             text.setText(button_number);
-   
-        } else if(action == "+"){
+        } else if (action.equals("+")){
                 text.setText(button_number);
                 action = "+_";
-        } else if (action == "-"){
+        } else if (action.equals("-")){
                 text.setText(button_number);
                 action = "-_"; 
-        } else if (action == "*"){
+        } else if (action.equals("*")){
                 text.setText(button_number);
                 action = "*_"; 
-        } else if (action == "/"){
+        } else if (action.equals("/")){
                 text.setText(button_number);
                 action = "/_";
-        } else if (action == "="){
+        } else if (action.equals("=")){
                 text.setText(button_number);
                 action = "";
         } else{
@@ -417,9 +423,11 @@ public class Main extends javax.swing.JFrame {
     
     private void jButton_equalActionPreformed(java.awt.event.ActionEvent evt){
         
-        calculatepreviousconstant();  
+        calculatepreviousconstant();
         
-        text.setText(Integer.toString(constant));
+        if (! error){
+            text.setText(Integer.toString(constant));
+        }
         
         action = "=";
     }
@@ -429,27 +437,28 @@ public class Main extends javax.swing.JFrame {
        text.setText("0");
        
        constant = 0;
+       
+       error = false;
                
        action = "beginning";
     }
     
     private void calculatepreviousconstant(){
         
-        if (action == "beginning"){
+        if (action.equals("beginning")){
                 constant = Integer.parseInt(text.getText());
-        } else if ((action == "+")||(action == "+_")){
+        } else if ((action.equals("+"))||(action.equals("+_"))){
                 constant = constant + Integer.parseInt(text.getText());
-        } else if ((action == "-")||(action == "-_")){
+        } else if ((action.equals("-"))||(action.equals("-_"))){
                 constant = constant - Integer.parseInt(text.getText());
-        } else if ((action == "*")||(action == "*_")){
+        } else if ((action.equals("*"))||(action.equals("*_"))){
                 constant = constant * Integer.parseInt(text.getText());
-        } else if ((action == "/")||(action == "/_")){
-            if (constant == 0){
-                text.setText("nope");
+        } else if ((action.equals("/"))||(action.equals("/_"))){
+            if (text.getText().equals("0")){
+                error = true;
+                text.setText("error: can not divide by 0");
             } else
             constant = constant / Integer.parseInt(text.getText());
         } 
-        System.out.println("constnat is: " + constant);
-
     }
 }
